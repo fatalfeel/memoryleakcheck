@@ -139,7 +139,7 @@ void hashmap_Print(allochashmap* map, int outp(const char *format, ...))
 			//totalelem++;
 			//localload++;
 			
-			outp("Addr:0x%016llX - Size: %lu allocated in %s:%d\n",(unsigned long long)nextn->info->ptr, nextn->info->size, nextn->info->file, nextn->info->line);
+			outp("Addr:0x%016llX - Size: %llu allocated in %s:%d\n",(unsigned long long)nextn->info->ptr, (unsigned long long)nextn->info->size, nextn->info->file, nextn->info->line);
 			nextn=nextn->next;
 		}
 		
