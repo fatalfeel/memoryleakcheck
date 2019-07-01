@@ -1,4 +1,4 @@
-# Cross platform c/c++ memory leak check
+# Cross platform c/c++ memory leak check open source
 Original source from Umberto Raimondi
 
 Fit both x86 and x64 system also windows and linux
