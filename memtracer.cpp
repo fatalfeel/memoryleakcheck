@@ -237,18 +237,18 @@ void* operator new(size_t size) throw()
 	return tracingMalloc(size,"-N/A-",0);
 }
 
+void* operator new(size_t size, const char* name, int line)
+{
+	return tracingMalloc(size,name,line);
+}
+
 //void* operator new[] (size_t size) throw(std::bad_alloc)
 void* operator new[](size_t size) throw()
 {
 	return tracingMalloc(size,"-N/A-",0);
 }
 
-void* operator new(size_t size,const char* name,int line)
-{
-	return tracingMalloc(size,name,line);
-}
-
-void * operator new[] (size_t size,const char* name,int line)
+void * operator new[] (size_t size, const char* name, int line)
 {
 	return tracingMalloc(size,name,line);
 }
@@ -258,7 +258,17 @@ void operator delete(void* ptr) throw()
 	tracingFree(ptr);
 }
 
+void operator delete(void* ptr, const char* name, int line)
+{
+	tracingFree(ptr);
+}
+
 void operator delete[](void* ptr) throw()
+{
+	tracingFree(ptr);
+}
+
+void operator delete[](void* ptr, const char* name, int line)
 {
 	tracingFree(ptr);
 }

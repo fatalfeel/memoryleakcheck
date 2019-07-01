@@ -57,12 +57,16 @@ void	dumpAlloc();
 #ifdef __cplusplus
 	//void*	operator new(size_t) throw(std::bad_alloc);
 	void*	operator new(size_t) throw();
-	void*	operator new(size_t,const char* name,int line);
+	void*	operator new(size_t, const char* name, int line);
 	//void*	operator new[] (size_t) throw(std::bad_alloc);
 	void*	operator new[](size_t) throw();
-	void*	operator new[] (size_t,const char* name,int line);
+	void*	operator new[] (size_t, const char* name, int line);
+	
 	void	operator delete(void*) throw();
+	void	operator delete(void*, const char* name, int line);
 	void	operator delete[](void*) throw();
+	void	operator delete[](void*, const char* name, int line);
+			
 	#define tracingNew new (__FILE__,__LINE__)
 	#define tracingDelete delete
 	#define new tracingNew
