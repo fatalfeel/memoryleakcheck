@@ -6,6 +6,20 @@
 
 #include "memtracer.h"
 
+class MyWork
+{
+public:
+	MyWork(int a, int b)
+	{
+		int c = a + b;
+		c++;
+	}
+
+	~MyWork()
+	{
+	}
+};
+
 int main()
 {
 		
@@ -14,6 +28,9 @@ int main()
 
 	char* b = (char*)malloc(8);
 	//free(b);
+
+	MyWork* work = new MyWork(1, 2);
+	//delete work;
 	
 	dumpAlloc();
 
