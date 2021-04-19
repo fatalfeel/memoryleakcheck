@@ -9,10 +9,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-//--------------------------------------------------------------------------------------------
 // Allocation descriptors HashMap related functions
-
 static size_t genHash(size_t max, void* ptr)
 {
 	size_t key= (size_t)ptr;
@@ -73,19 +70,19 @@ void hashmap_Destroy(allochashmap* map)
 }
 
 /**
-   Remove the allocation descriptor of the given pointer, returns 0: found, -1:not found
+   Remove the allocation descriptor of the given pointer, returns true: found, false:no found
  */
 bool hashmap_Delete(allochashmap* map, void* ptr)
 {
-	size_t idx=genHash(map->size, ptr);
-	allocnode* cur= map->table[idx];
-	allocnode* prev= map->table[idx];
+	size_t		idx	= genHash(map->size, ptr);
+	allocnode*	cur	= map->table[idx];
+	allocnode*	prev= map->table[idx];
 
 	while(cur != NULL)
 	{
 		if (cur->info->ptr == ptr) 
 		{
-			allocnode* found=cur;
+			//allocnode* found=cur;
 			if (prev==cur) 
 			{
 				map->table[idx]=cur->next;
@@ -94,9 +91,11 @@ bool hashmap_Delete(allochashmap* map, void* ptr)
 			{
 				prev->next=cur->next;
 			}
-			free(found->info->file);
-			free(found->info);
-			free(found);
+			
+			free(cur->info->file);	//free(found->info->file);
+			free(cur->info);		//free(found->info);
+			free(cur);				//free(found);
+			
 			return true;
 		}
 		else
@@ -114,20 +113,15 @@ bool hashmap_Delete(allochashmap* map, void* ptr)
  */
 void hashmap_Print(allochashmap* map, int outp(const char *format, ...))
 {
-	/*int	localload;
-	int		totalelem		= 0;
-	int		maxloadpernode	= 0;*/
-	int		load	= 0;
+	//int	load	= 0;
 	int		isfirst	= 1;
 	
 	for(size_t i=0; i<map->size; ++i)
 	{
-		allocnode* nextn=map->table[i];
+		allocnode* nextn = map->table[i];
 		
-		if (nextn != NULL)
-			load++;
-		
-		//localload=0;
+		//if (nextn != NULL)
+		//	load++;
 		while(nextn != NULL)
 		{
 			if (isfirst)
@@ -136,15 +130,9 @@ void hashmap_Print(allochashmap* map, int outp(const char *format, ...))
 				outp("--- Memory Leak status ---\n");
 			}
 			
-			//totalelem++;
-			//localload++;
-			
 			outp("Addr:0x%016llX - Size: %llu allocated in %s:%d\n", (unsigned long long)nextn->info->ptr, (unsigned long long)nextn->info->size, nextn->info->file, nextn->info->line);
-			nextn=nextn->next;
+			nextn = nextn->next;
 		}
-		
-		//if (localload>maxloadpernode) 
-		//	maxloadpernode=localload;
 	}
 }
 
@@ -225,13 +213,11 @@ void dumpAlloc()
 	hashmap_Print(allocMap,&printf);
 	hashmap_Destroy(allocMap);
 }
-
 #ifdef __cplusplus
 }
 #endif
 
 #ifdef __cplusplus
-//void* operator new(size_t size) throw(std::bad_alloc)
 void* operator new(size_t size) throw()
 {
 	return tracingMalloc(size,"-N/A-",0);
